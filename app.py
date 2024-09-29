@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, render_template 
 from flask import send_from_directory
 
 from werkzeug.utils import secure_filename
@@ -46,22 +46,9 @@ def upload_file():
             image_parser.process_document(path)
             print("processed...")
             image_parser.generate_image("file.pil", text)
-            print("generated...")
+            print("generated...") 
             return redirect(url_for('download_file', name="out.png"))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <h1>Generate text in your handwriting!</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=text name=text>
-      <input type=submit value=Upload onsubmit="$('#loading').show();">
-    
-    <div id="loading" style="display:none;">loading...</div>
-
-    </form>
-    '''
+    return render_template("page.html")
 
 @app.route('/uploads/<name>')
 def download_file(name):
